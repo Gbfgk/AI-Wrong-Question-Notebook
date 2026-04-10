@@ -1,0 +1,163 @@
+{% extends "base.html" %}
+
+{% block title %}仪表盘 - AI错题本{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col s12">
+        <h4 class="blue-text text-darken-2">
+            <i class="material-icons">dashboard</i>学习仪表盘
+        </h4>
+        <p class="grey-text">欢迎回来，{{ session.username }}！</p>
+    </div>
+</div>
+
+<!-- 统计卡片 -->
+<div class="row" style="margin-top: 30px;">
+    <div class="col s12 m4">
+        <div class="card blue lighten-4 hoverable">
+            <div class="card-content center-align">
+                <span class="card-title blue-text text-darken-2">
+                    <i class="material-icons">library_books</i>
+                </span>
+                <h2 class="blue-text text-darken-3">{{ total_mistakes }}</h2>
+                <p class="blue-text text-darken-1">总错题数</p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col s12 m4">
+        <div class="card green lighten-4 hoverable">
+            <div class="card-content center-align">
+                <span class="card-title green-text text-darken-2">
+                    <i class="material-icons">check_circle</i>
+                </span>
+                <h2 class="green-text text-darken-3">
+                    {% if total_mistakes > 0 %}
+                        {{ (total_mistakes | int) }}
+                    {% else %}
+                        0
+                    {% endif %}
+                </h2>
+                <p class="green-text text-darken-1">已解答</p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col s12 m4">
+        <div class="card orange lighten-4 hoverable">
+            <div class="card-content center-align">
+                <span class="card-title orange-text text-darken-2">
+                    <i class="material-icons">auto_awesome</i>
+                </span>
+                <h2 class="orange-text text-darken-3">
+                    {{ similar_count | default(0) }}
+                </h2>
+                <p class="orange-text text-darken-1">举一反三题目</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row" style="margin-top: 30px;">
+    <!-- 科目分布 -->
+    <div class="col s12 m6">
+        <div class="card z-depth-1">
+            <div class="card-content">
+                <span class="card-title blue-text text-darken-2">
+                    <i class="material-icons">pie_chart</i>科目分布
+                </span>
+                {% if subject_stats %}
+                    <ul class="collection">
+                        {% for stat in subject_stats %}
+                            <li class="collection-item">
+                                <div class="progress" style="margin-bottom: 5px;">
+                                    <div class="determinate blue lighten-2" 
+                                         style="width: {{ (stat.count / total_mistakes * 100) if total_mistakes > 0 else 0 }}%"></div>
+                                </div>
+                                <span>{{ stat.subject }}</span>
+                                <span class="badge blue white-text">{{ stat.count }}</span>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <p class="grey-text center-align" style="padding: 30px;">
+                        暂无数据，<a href="{{ url_for('add_mistake') }}" class="blue-text">添加第一道错题</a>
+                    </p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    
+    <!-- 最近错题 -->
+    <div class="col s12 m6">
+        <div class="card z-depth-1">
+            <div class="card-content">
+                <span class="card-title blue-text text-darken-2">
+                    <i class="material-icons">access_time</i>最近错题
+                </span>
+                {% if recent_mistakes %}
+                    <ul class="collection with-header">
+                        {% for mistake in recent_mistakes %}
+                            <li class="collection-item">
+                                <div class="collection-header">
+                                    <strong>{{ mistake.subject }}</strong>
+                                    <span class="right grey-text">{{ mistake.created_at[:10] }}</span>
+                                </div>
+                                <p class="truncate">{{ mistake.question_text[:80] }}...</p>
+                                <a href="{{ url_for('view_mistake', mistake_id=mistake.id) }}" 
+                                   class="secondary-content blue-text">
+                                    查看 <i class="material-icons tiny">chevron_right</i>
+                                </a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                    <div class="center-align" style="margin-top: 15px;">
+                        <a href="{{ url_for('mistakes_list') }}" class="btn blue lighten-1 waves-effect waves-light">
+                            查看全部 <i class="material-icons right">arrow_forward</i>
+                        </a>
+                    </div>
+                {% else %}
+                    <p class="grey-text center-align" style="padding: 30px;">
+                        暂无错题，<a href="{{ url_for('add_mistake') }}" class="blue-text">添加第一道错题</a>
+                    </p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 快速操作 -->
+<div class="fixed-action-btn">
+    <a class="btn-floating btn-large blue lighten-1 pulse">
+        <i class="material-icons">add</i>
+    </a>
+    <ul>
+        <li>
+            <a href="{{ url_for('add_mistake') }}" 
+               class="btn-floating blue darken-1 tooltipped" 
+               data-position="left" data-tooltip="添加错题">
+                <i class="material-icons">library_add</i>
+            </a>
+        </li>
+        <li>
+            <a href="{{ url_for('mistakes_list') }}" 
+               class="btn-floating green darken-1 tooltipped" 
+               data-position="left" data-tooltip="查看错题本">
+                <i class="material-icons">list</i>
+            </a>
+        </li>
+    </ul>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var elems = document.querySelectorAll('.tooltipped');
+        M.Tooltip.init(elems);
+        var fab = document.querySelectorAll('.fixed-action-btn');
+        M.FloatingActionButton.init(fab);
+    });
+</script>
+{% endblock %}

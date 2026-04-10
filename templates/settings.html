@@ -1,0 +1,117 @@
+{% extends "base.html" %}
+
+{% block title %}系统设置 - AI错题本{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col s12">
+        <h4 class="blue-text text-darken-2">
+            <i class="material-icons">settings</i>系统设置
+        </h4>
+    </div>
+</div>
+
+<div class="row" style="margin-top: 30px;">
+    <div class="col s12 m8 offset-m2">
+        <div class="card z-depth-2">
+            <div class="card-content">
+                <span class="card-title blue-text text-darken-2">
+                    <i class="material-icons">cloud_settings</i>API配置
+                </span>
+                
+                {% if config %}
+                    <div class="collection with-header">
+                        <li class="collection-item active blue lighten-1">当前配置</li>
+                        <li class="collection-item">
+                            <strong>API Base URL:</strong>
+                            <span class="right grey-text">{{ config.api.base_url }}</span>
+                        </li>
+                        <li class="collection-item">
+                            <strong>API密钥:</strong>
+                            <span class="right grey-text">{{ config.api.key[:10] }}...{{ config.api.key[-4:] }}</span>
+                        </li>
+                    </div>
+                    
+                    <div class="divider" style="margin: 30px 0;"></div>
+                    
+                    <div class="row">
+                        <div class="col s12">
+                            <h5><i class="material-icons">database</i>数据库配置</h5>
+                            <ul class="collection">
+                                <li class="collection-item">
+                                    <strong>主机:</strong> {{ config.database.host }}
+                                    <span class="right"><strong>端口:</strong> {{ config.database.port }}</span>
+                                </li>
+                                <li class="collection-item">
+                                    <strong>数据库名:</strong> {{ config.database.name }}
+                                </li>
+                                <li class="collection-item">
+                                    <strong>用户名:</strong> {{ config.database.user }}
+                                </li>
+                            </ul>
+                            
+                            <p class="grey-text" style="margin-top: 20px;">
+                                <i class="material-icons left">info</i>
+                                注意：当前使用SQLite作为默认数据库，配置文件位于 data/config.json
+                            </p>
+                        </div>
+                    </div>
+                {% else %}
+                    <div class="card orange lighten-5">
+                        <div class="card-content">
+                            <p class="orange-text text-darken-2">
+                                <i class="material-icons left">warning</i>
+                                未找到配置文件，请运行 setup_config.py 进行初始化配置
+                            </p>
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+            <div class="card-action">
+                <a href="{{ url_for('dashboard') }}" class="btn blue lighten-1 waves-effect waves-light">
+                    <i class="material-icons left">arrow_back</i>返回仪表盘
+                </a>
+                <a href="{{ url_for('logout') }}" class="btn grey lighten-1 waves-effect waves-light">
+                    <i class="material-icons left">exit_to_app</i>退出登录
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 使用说明 -->
+<div class="row" style="margin-top: 30px;">
+    <div class="col s12">
+        <div class="card z-depth-1">
+            <div class="card-content">
+                <span class="card-title green-text text-darken-2">
+                    <i class="material-icons">help_outline</i>使用说明
+                </span>
+                <div class="divider"></div>
+                <ol class="browser-default" style="margin-left: 20px; margin-top: 20px;">
+                    <li class="flow-text" style="font-size: 16px;">
+                        <strong>首次启动配置：</strong>
+                        <p class="grey-text">运行 <code>python setup_config.py</code> 输入数据库和API配置信息</p>
+                    </li>
+                    <li class="flow-text" style="font-size: 16px; margin-top: 15px;">
+                        <strong>用户注册登录：</strong>
+                        <p class="grey-text">访问首页点击"免费注册"创建账户，或使用已有账户登录</p>
+                    </li>
+                    <li class="flow-text" style="font-size: 16px; margin-top: 15px;">
+                        <strong>添加错题：</strong>
+                        <p class="grey-text">登录后点击"添加错题"，填写题目信息和相关知识</p>
+                    </li>
+                    <li class="flow-text" style="font-size: 16px; margin-top: 15px;">
+                        <strong>AI智能解答：</strong>
+                        <p class="grey-text">在错题详情页点击"获取AI解答"，系统将调用AI生成详细解析</p>
+                    </li>
+                    <li class="flow-text" style="font-size: 16px; margin-top: 15px;">
+                        <strong>举一反三：</strong>
+                        <p class="grey-text">在错题详情页点击"生成练习题"，AI将生成相似题目帮助巩固</p>
+                    </li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

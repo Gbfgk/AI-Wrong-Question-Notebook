@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block title %}注册 - AI错题本{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col s12 m6 offset-m3">
+        <div class="card z-depth-2">
+            <div class="card-content">
+                <span class="card-title center-align blue-text text-darken-2">
+                    <i class="material-icons">person_add</i>用户注册
+                </span>
+                <form method="POST" action="{{ url_for('register') }}">
+                    <div class="input-field">
+                        <i class="material-icons prefix">person</i>
+                        <input id="username" name="username" type="text" required minlength="3" maxlength="50">
+                        <label for="username">用户名（3-50个字符）</label>
+                    </div>
+                    <div class="input-field">
+                        <i class="material-icons prefix">email</i>
+                        <input id="email" name="email" type="email">
+                        <label for="email">邮箱（可选）</label>
+                    </div>
+                    <div class="input-field">
+                        <i class="material-icons prefix">lock</i>
+                        <input id="password" name="password" type="password" required minlength="6">
+                        <label for="password">密码（至少6位）</label>
+                    </div>
+                    <div class="center-align" style="margin-top: 30px;">
+                        <button type="submit" class="btn blue lighten-1 waves-effect waves-light">
+                            <i class="material-icons left">person_add</i>注册
+                        </button>
+                    </div>
+                    <div class="center-align" style="margin-top: 20px;">
+                        <p class="grey-text">
+                            已有账户？<a href="{{ url_for('login') }}" class="blue-text">立即登录</a>
+                        </p>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

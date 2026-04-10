@@ -1,0 +1,244 @@
+/* 自定义样式 - Google设计风格 */
+
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: #f5f5f5;
+    display: flex;
+    min-height: 100vh;
+    flex-direction: column;
+}
+
+main {
+    flex: 1 0 auto;
+}
+
+/* 导航栏优化 */
+nav {
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+nav .brand-logo {
+    font-weight: 500;
+}
+
+/* 卡片优化 */
+.card {
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.card:hover {
+    box-shadow: 0 8px 16px rgba(0,0,0,0.15);
+}
+
+/* 按钮优化 */
+.btn, .btn-large {
+    border-radius: 4px;
+    text-transform: none;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+}
+
+.btn-floating {
+    border-radius: 50%;
+}
+
+/* 输入框优化 */
+.input-field input[type=text]:focus + label,
+.input-field input[type=password]:focus + label,
+.input-field input[type=email]:focus + label,
+.input-field textarea:focus + label {
+    color: #2196f3;
+}
+
+.input-field input[type=text]:focus,
+.input-field input[type=password]:focus,
+.input-field input[type=email]:focus,
+.input-field textarea:focus {
+    border-bottom: 2px solid #2196f3;
+    box-shadow: 0 1px 0 0 #2196f3;
+}
+
+/* 集合项优化 */
+.collection-item {
+    border-radius: 4px;
+    margin-bottom: 5px;
+}
+
+/* 徽章优化 */
+.badge {
+    border-radius: 12px;
+    padding: 0 12px;
+    font-weight: 500;
+}
+
+/* 警告提示优化 */
+.alert {
+    border-radius: 8px;
+    border-left: 4px solid;
+}
+
+.alert-success {
+    border-left-color: #4caf50;
+    background-color: #e8f5e9;
+}
+
+.alert-danger {
+    border-left-color: #f44336;
+    background-color: #ffebee;
+}
+
+.alert-warning {
+    border-left-color: #ff9800;
+    background-color: #fff3e0;
+}
+
+.alert-info {
+    border-left-color: #2196f3;
+    background-color: #e3f2fd;
+}
+
+/* 进度条优化 */
+.progress {
+    height: 8px;
+    border-radius: 4px;
+    background-color: #e0e0e0;
+}
+
+.progress .determinate {
+    border-radius: 4px;
+}
+
+/* 页脚优化 */
+footer.page-footer {
+    padding-top: 40px;
+}
+
+/* 响应式优化 */
+@media only screen and (max-width: 600px) {
+    nav .brand-logo {
+        font-size: 18px;
+    }
+    
+    .hide-on-med-and-down {
+        display: none;
+    }
+}
+
+/* Material Icons 优化 */
+.material-icons {
+    vertical-align: middle;
+}
+
+/* 动画效果 */
+.fade-in {
+    animation: fadeIn 0.5s ease-in;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* 加载动画 */
+.preloader-wrapper {
+    margin: 20px auto;
+}
+
+/* 头像圆形 */
+.blue-circle {
+    background: linear-gradient(135deg, #2196f3 0%, #1976d2 100%);
+    box-shadow: 0 4px 8px rgba(33, 150, 243, 0.3);
+}
+
+/* 题目内容格式化 */
+.question-content {
+    white-space: pre-wrap;
+    line-height: 1.8;
+}
+
+/* 侧边栏菜单 */
+.side-nav {
+    border-radius: 0 8px 8px 0;
+}
+
+/* 下拉菜单优化 */
+.dropdown-content {
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+/* 模态框优化 */
+.modal {
+    border-radius: 8px;
+}
+
+.modal-content {
+    padding: 30px;
+}
+
+/* Toast 通知优化 */
+.toast {
+    border-radius: 8px;
+    font-weight: 500;
+}
+
+/* 固定操作按钮 */
+.fixed-action-btn {
+    bottom: 30px;
+    right: 30px;
+}
+
+/* 表格优化 */
+table.highlight tbody tr {
+    transition: background-color 0.2s ease;
+}
+
+table.highlight tbody tr:hover {
+    background-color: #e3f2fd;
+}
+
+/* 分隔线优化 */
+.divider {
+    margin: 20px 0;
+}
+
+/* 标签芯片优化 */
+.chip {
+    border-radius: 16px;
+    margin-right: 8px;
+    margin-bottom: 8px;
+}
+
+/* 时间显示优化 */
+.time-ago {
+    color: #9e9e9e;
+    font-size: 12px;
+}
+
+/* 空状态提示 */
+.empty-state {
+    text-align: center;
+    padding: 60px 20px;
+}
+
+.empty-state i {
+    font-size: 80px;
+    color: #bdbdbd;
+    margin-bottom: 20px;
+}
+
+.empty-state h5 {
+    color: #757575;
+    margin-bottom: 10px;
+}
+
+.empty-state p {
+    color: #9e9e9e;
+}
