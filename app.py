@@ -364,7 +364,7 @@ def add_mistake():
         flash('错题添加成功', 'success')
         return redirect(url_for('view_mistake', mistake_id=mistake_id))
     
-    return render_template('mistake_form.html')
+    return render_template('mistake_form.html', mistake=None)
 
 @app.route('/mistake/<int:mistake_id>')
 @login_required
