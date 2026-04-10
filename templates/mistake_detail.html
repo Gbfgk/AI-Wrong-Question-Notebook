@@ -1,0 +1,246 @@
+{% extends "base.html" %}
+
+{% block title %}错题详情 - AI错题本{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col s12">
+        <a href="{{ url_for('mistakes_list') }}" class="btn-flat waves-effect">
+            <i class="material-icons left">arrow_back</i>返回列表
+        </a>
+        <h4 class="blue-text text-darken-2" style="display: inline-block; margin-left: 10px;">
+            <i class="material-icons">{{ mistake.subject }}</i>{{ mistake.subject }}
+        </h4>
+    </div>
+</div>
+
+<div class="row" style="margin-top: 20px;">
+    <!-- 题目信息 -->
+    <div class="col s12 m7">
+        <div class="card z-depth-1">
+            <div class="card-content">
+                <span class="card-title blue-text text-darken-2">
+                    <i class="material-icons">menu_book</i>题目内容
+                </span>
+                <div class="divider"></div>
+                <p style="white-space: pre-wrap; margin-top: 20px;">{{ mistake.question_text }}</p>
+                
+                <div class="row" style="margin-top: 30px;">
+                    <div class="col s12 m6">
+                        <div class="card orange lighten-5">
+                            <div class="card-content">
+                                <span class="card-title orange-text text-darken-2">
+                                    <i class="material-icons">person</i>你的答案
+                                </span>
+                                <p style="white-space: pre-wrap;">{{ mistake.user_answer or '未作答' }}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col s12 m6">
+                        <div class="card green lighten-5">
+                            <div class="card-content">
+                                <span class="card-title green-text text-darken-2">
+                                    <i class="material-icons">check_circle</i>正确答案
+                                </span>
+                                <p style="white-space: pre-wrap;">{{ mistake.correct_answer or '未知' }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                {% if mistake.error_reason %}
+                    <div class="card red lighten-5">
+                        <div class="card-content">
+                            <span class="card-title red-text text-darken-2">
+                                <i class="material-icons">warning</i>错误原因
+                            </span>
+                            <p>{{ mistake.error_reason }}</p>
+                        </div>
+                    </div>
+                {% endif %}
+                
+                {% if mistake.knowledge_points %}
+                    <div class="card blue lighten-5">
+                        <div class="card-content">
+                            <span class="card-title blue-text text-darken-2">
+                                <i class="material-icons">lightbulb</i>知识点
+                            </span>
+                            <p>{{ mistake.knowledge_points }}</p>
+                        </div>
+                    </div>
+                {% endif %}
+                
+                <div class="row" style="margin-top: 20px;">
+                    <div class="col s12 m6">
+                        <p><strong>难度等级:</strong> 
+                            {% for i in range(mistake.difficulty_level) %}<span class="orange-text">★</span>{% endfor %}
+                        </p>
+                    </div>
+                    <div class="col s12 m6">
+                        <p><strong>来源:</strong> {{ mistake.source or '未填写' }}</p>
+                    </div>
+                    <div class="col s12 m6">
+                        <p><strong>创建时间:</strong> {{ mistake.created_at }}</p>
+                    </div>
+                    <div class="col s12 m6">
+                        <p><strong>更新时间:</strong> {{ mistake.updated_at }}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="card-action right-align">
+                <a href="{{ url_for('edit_mistake', mistake_id=mistake.id) }}" class="btn blue lighten-1 waves-effect waves-light">
+                    <i class="material-icons left">edit</i>编辑
+                </a>
+                <form method="POST" action="{{ url_for('delete_mistake', mistake_id=mistake.id) }}" style="display: inline-block;" onsubmit="return confirm('确定要删除这道错题吗？');">
+                    <button type="submit" class="btn red lighten-1 waves-effect waves-light">
+                        <i class="material-icons left">delete</i>删除
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <!-- AI功能区域 -->
+    <div class="col s12 m5">
+        <!-- AI解答 -->
+        <div class="card z-depth-1">
+            <div class="card-content">
+                <span class="card-title purple-text text-darken-2">
+                    <i class="material-icons">psychology</i>AI智能解答
+                </span>
+                <div class="divider"></div>
+                
+                {% if mistake.solution_text %}
+                    <div id="solution-content" style="white-space: pre-wrap; margin-top: 20px;">{{ mistake.solution_text }}</div>
+                {% else %}
+                    <p class="grey-text" style="padding: 20px 0;">点击按钮获取AI详细解答</p>
+                {% endif %}
+            </div>
+            <div class="card-action">
+                <button id="solve-btn" class="btn purple lighten-1 waves-effect waves-light" {% if mistake.solution_text %}disabled{% endif %}>
+                    <i class="material-icons left">auto_awesome</i>
+                    {% if mistake.solution_text %}已解答{% else %}获取AI解答{% endif %}
+                </button>
+            </div>
+        </div>
+        
+        <!-- 举一反三 -->
+        <div class="card z-depth-1">
+            <div class="card-content">
+                <span class="card-title orange-text text-darken-2">
+                    <i class="material-icons">auto_awesome</i>举一反三
+                </span>
+                <div class="divider"></div>
+                
+                {% if similar_questions %}
+                    <div class="collection" style="margin-top: 15px;">
+                        {% for sq in similar_questions %}
+                            <div class="collection-item">
+                                <strong>题目{{ loop.index }}:</strong>
+                                <p style="margin: 10px 0;">{{ sq.question_text }}</p>
+                                <p class="green-text"><strong>答案:</strong> {{ sq.answer }}</p>
+                                <p class="grey-text"><strong>解析:</strong> {{ sq.explanation }}</p>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <p class="grey-text" style="padding: 20px 0;">点击按钮生成相似练习题</p>
+                {% endif %}
+            </div>
+            <div class="card-action">
+                <button id="similar-btn" class="btn orange lighten-1 waves-effect waves-light">
+                    <i class="material-icons left">refresh</i>生成练习题
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 加载提示 -->
+<div id="loading-modal" class="modal">
+    <div class="modal-content center-align">
+        <div class="preloader-wrapper big active">
+            <div class="spinner-layer spinner-blue-only">
+                <div class="circle-clipper left">
+                    <div class="circle"></div>
+                </div>
+                <div class="gap-patch">
+                    <div class="circle"></div>
+                </div>
+                <div class="circle-clipper right">
+                    <div class="circle"></div>
+                </div>
+            </div>
+        </div>
+        <h5 id="loading-text">正在处理...</h5>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // AI解答按钮
+        document.getElementById('solve-btn').addEventListener('click', function() {
+            var btn = this;
+            btn.disabled = true;
+            
+            // 显示加载提示
+            M.toast({html: '正在请求AI解答...', classes: 'blue'});
+            
+            fetch('/mistake/{{ mistake.id }}/solve', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    document.getElementById('solution-content').innerText = data.solution;
+                    btn.innerHTML = '<i class="material-icons left">check_circle</i>已解答';
+                    M.toast({html: 'AI解答生成成功！', classes: 'green'});
+                } else {
+                    btn.disabled = false;
+                    M.toast({html: data.error || '生成失败，请重试', classes: 'red'});
+                }
+            })
+            .catch(error => {
+                btn.disabled = false;
+                M.toast({html: '请求失败：' + error, classes: 'red'});
+            });
+        });
+        
+        // 举一反三按钮
+        document.getElementById('similar-btn').addEventListener('click', function() {
+            var btn = this;
+            btn.disabled = true;
+            
+            M.toast({html: '正在生成练习题...', classes: 'orange'});
+            
+            fetch('/mistake/{{ mistake.id }}/similar', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    M.toast({html: data.message, classes: 'green'});
+                    setTimeout(() => {
+                        location.reload();
+                    }, 1500);
+                } else {
+                    btn.disabled = false;
+                    M.toast({html: data.error || '生成失败，请重试', classes: 'red'});
+                }
+            })
+            .catch(error => {
+                btn.disabled = false;
+                M.toast({html: '请求失败：' + error, classes: 'red'});
+            });
+        });
+    });
+</script>
+{% endblock %}

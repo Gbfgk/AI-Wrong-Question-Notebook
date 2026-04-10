@@ -1,0 +1,116 @@
+{% extends "base.html" %}
+
+{% block title %}{% if mistake %}编辑错题{% else %}添加错题{% endif %} - AI错题本{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col s12">
+        <h4 class="blue-text text-darken-2">
+            <i class="material-icons">{% if mistake %}edit{% else %}add_circle{% endif %}</i>
+            {% if mistake %}编辑错题{% else %}添加新错题{% endif %}
+        </h4>
+    </div>
+</div>
+
+<div class="row" style="margin-top: 20px;">
+    <div class="col s12">
+        <div class="card z-depth-1">
+            <div class="card-content">
+                <form method="POST" class="form-container">
+                    <div class="row">
+                        <div class="input-field col s12 m6">
+                            <select name="subject" id="subject" required>
+                                <option value="" disabled {% if not mistake.subject %}selected{% endif %}>选择科目</option>
+                                <option value="数学" {% if mistake.subject == '数学' %}selected{% endif %}>数学</option>
+                                <option value="语文" {% if mistake.subject == '语文' %}selected{% endif %}>语文</option>
+                                <option value="英语" {% if mistake.subject == '英语' %}selected{% endif %}>英语</option>
+                                <option value="物理" {% if mistake.subject == '物理' %}selected{% endif %}>物理</option>
+                                <option value="化学" {% if mistake.subject == '化学' %}selected{% endif %}>化学</option>
+                                <option value="生物" {% if mistake.subject == '生物' %}selected{% endif %}>生物</option>
+                                <option value="历史" {% if mistake.subject == '历史' %}selected{% endif %}>历史</option>
+                                <option value="地理" {% if mistake.subject == '地理' %}selected{% endif %}>地理</option>
+                                <option value="政治" {% if mistake.subject == '政治' %}selected{% endif %}>政治</option>
+                                <option value="其他" {% if mistake.subject == '其他' %}selected{% endif %}>其他</option>
+                            </select>
+                            <label>科目</label>
+                        </div>
+                        
+                        <div class="input-field col s12 m6">
+                            <select name="difficulty_level" id="difficulty_level">
+                                <option value="1" {% if mistake.difficulty_level == 1 %}selected{% endif %}>★ 简单</option>
+                                <option value="2" {% if mistake.difficulty_level == 2 %}selected{% endif %}>★★ 中等</option>
+                                <option value="3" {% if mistake.difficulty_level == 3 %}selected{% endif %}>★★★ 困难</option>
+                                <option value="4" {% if mistake.difficulty_level == 4 %}selected{% endif %}>★★★★ 很难</option>
+                                <option value="5" {% if mistake.difficulty_level == 5 %}selected{% endif %}>★★★★★ 极难</option>
+                            </select>
+                            <label>难度等级</label>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="input-field col s12">
+                            <textarea id="question_text" name="question_text" class="materialize-textarea" required>{% if mistake %}{{ mistake.question_text }}{% endif %}</textarea>
+                            <label for="question_text">题目内容 *</label>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="input-field col s12 m6">
+                            <textarea id="user_answer" name="user_answer" class="materialize-textarea">{% if mistake %}{{ mistake.user_answer }}{% endif %}</textarea>
+                            <label for="user_answer">你的答案</label>
+                        </div>
+                        
+                        <div class="input-field col s12 m6">
+                            <textarea id="correct_answer" name="correct_answer" class="materialize-textarea">{% if mistake %}{{ mistake.correct_answer }}{% endif %}</textarea>
+                            <label for="correct_answer">正确答案</label>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="input-field col s12 m6">
+                            <textarea id="error_reason" name="error_reason" class="materialize-textarea">{% if mistake %}{{ mistake.error_reason }}{% endif %}</textarea>
+                            <label for="error_reason">错误原因</label>
+                        </div>
+                        
+                        <div class="input-field col s12 m6">
+                            <input type="text" id="knowledge_points" name="knowledge_points" value="{% if mistake %}{{ mistake.knowledge_points }}{% endif %}">
+                            <label for="knowledge_points">知识点</label>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="input-field col s12">
+                            <input type="text" id="source" name="source" value="{% if mistake %}{{ mistake.source }}{% endif %}">
+                            <label for="source">题目来源（可选）</label>
+                        </div>
+                    </div>
+                    
+                    <div class="row" style="margin-top: 30px;">
+                        <div class="col s12 right-align">
+                            <a href="{{ url_for('mistakes_list') }}" class="btn grey lighten-1 waves-effect waves-light">
+                                <i class="material-icons left">cancel</i>取消
+                            </a>
+                            <button type="submit" class="btn blue lighten-1 waves-effect waves-light">
+                                <i class="material-icons left">{% if mistake %}update{% else %}save{% endif %}</i>
+                                {% if mistake %}更新{% else %}保存{% endif %}
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var elems = document.querySelectorAll('select');
+        M.FormSelect.init(elems);
+        
+        var textareas = document.querySelectorAll('textarea.materialize-textarea');
+        M.Textarea.init(textareas);
+    });
+</script>
+{% endblock %}

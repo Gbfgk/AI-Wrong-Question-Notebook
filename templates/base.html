@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}AI错题本{% endblock %}</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <!-- Material Icons -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!-- Materialize CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="blue lighten-1">
+        <div class="nav-wrapper container">
+            <a href="{{ url_for('index') }}" class="brand-logo">
+                <i class="material-icons">school</i>AI错题本
+            </a>
+            <ul class="right hide-on-med-and-down">
+                {% if session.user_id %}
+                    <li><a href="{{ url_for('dashboard') }}"><i class="material-icons left">dashboard</i>仪表盘</a></li>
+                    <li><a href="{{ url_for('mistakes_list') }}"><i class="material-icons left">library_books</i>错题本</a></li>
+                    <li><a href="{{ url_for('add_mistake') }}"><i class="material-icons left">add_circle</i>添加错题</a></li>
+                    <li><a href="{{ url_for('profile') }}"><i class="material-icons left">person</i>{{ session.username }}</a></li>
+                    <li><a href="{{ url_for('logout') }}"><i class="material-icons left">exit_to_app</i>退出</a></li>
+                {% else %}
+                    <li><a href="{{ url_for('login') }}"><i class="material-icons left">login</i>登录</a></li>
+                    <li><a href="{{ url_for('register') }}"><i class="material-icons left">person_add</i>注册</a></li>
+                {% endif %}
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="container" style="margin-top: 30px;">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }} card z-depth-1">
+                        <div class="card-content">
+                            <span class="card-title">{{ message }}</span>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="page-footer blue lighten-1" style="margin-top: 50px;">
+        <div class="container">
+            <div class="row">
+                <div class="col l6 s12">
+                    <h5 class="white-text">AI错题本</h5>
+                    <p class="grey-text text-lighten-4">智能学习助手，帮助你高效管理错题，举一反三</p>
+                </div>
+                <div class="col l4 offset-l2 s12">
+                    <h5 class="white-text">快速链接</h5>
+                    <ul>
+                        <li><a class="grey-text text-lighten-3" href="{{ url_for('index') }}">首页</a></li>
+                        {% if session.user_id %}
+                            <li><a class="grey-text text-lighten-3" href="{{ url_for('dashboard') }}">仪表盘</a></li>
+                            <li><a class="grey-text text-lighten-3" href="{{ url_for('mistakes_list') }}">错题本</a></li>
+                        {% endif %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="footer-copyright blue darken-1">
+            <div class="container center-align">
+                © 2024 AI错题本 - 基于Flask + SQLite + OpenAI API
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

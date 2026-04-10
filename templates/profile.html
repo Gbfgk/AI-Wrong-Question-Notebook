@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+
+{% block title %}个人资料 - AI错题本{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col s12">
+        <h4 class="blue-text text-darken-2">
+            <i class="material-icons">person</i>个人资料
+        </h4>
+    </div>
+</div>
+
+<div class="row" style="margin-top: 30px;">
+    <div class="col s12 m6 offset-m3">
+        <div class="card z-depth-2">
+            <div class="card-content">
+                <div class="center-align" style="margin-bottom: 30px;">
+                    <div class="blue-circle white-text" style="width: 100px; height: 100px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 48px; background-color: #2196f3;">
+                        {{ user.username[0].upper() }}
+                    </div>
+                    <h4 class="blue-text text-darken-2" style="margin-top: 15px;">{{ user.username }}</h4>
+                </div>
+                
+                <ul class="collection with-header">
+                    <li class="collection-item active blue lighten-1">账户信息</li>
+                    <li class="collection-item">
+                        <strong><i class="material-icons left">person_outline</i>用户名</strong>
+                        <span class="right">{{ user.username }}</span>
+                    </li>
+                    <li class="collection-item">
+                        <strong><i class="material-icons left">email</i>邮箱</strong>
+                        <span class="right">{{ user.email or '未设置' }}</span>
+                    </li>
+                    <li class="collection-item">
+                        <strong><i class="material-icons left">event</i>注册时间</strong>
+                        <span class="right">{{ user.created_at }}</span>
+                    </li>
+                    <li class="collection-item">
+                        <strong><i class="material-icons left">access_time</i>最后登录</strong>
+                        <span class="right">{{ user.last_login or '首次登录' }}</span>
+                    </li>
+                    <li class="collection-item">
+                        <strong><i class="material-icons left">toggle_on</i>账户状态</strong>
+                        <span class="right green-text">{{ '正常' if user.is_active else '禁用' }}</span>
+                    </li>
+                </ul>
+            </div>
+            <div class="card-action center-align">
+                <a href="{{ url_for('dashboard') }}" class="btn blue lighten-1 waves-effect waves-light">
+                    <i class="material-icons left">dashboard</i>返回仪表盘
+                </a>
+                <a href="{{ url_for('logout') }}" class="btn orange lighten-1 waves-effect waves-light">
+                    <i class="material-icons left">exit_to_app</i>退出登录
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 学习统计 -->
+<div class="row" style="margin-top: 30px;">
+    <div class="col s12">
+        <div class="card z-depth-1">
+            <div class="card-content">
+                <span class="card-title blue-text text-darken-2">
+                    <i class="material-icons">trending_up</i>学习统计
+                </span>
+                <div class="divider"></div>
+                <p class="grey-text center-align" style="padding: 40px;">
+                    <i class="material-icons" style="font-size: 64px;">construction</i><br>
+                    学习统计功能开发中...
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
