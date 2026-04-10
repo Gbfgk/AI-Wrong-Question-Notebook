@@ -1,7 +1,7 @@
 ```
-# Python
-__pycache__/
+# Compiled and binary files
 *.pyc
+__pycache__/
 *.pyo
 *.pyd
 
@@ -12,25 +12,33 @@ venv/
 .env.local
 *.env.*
 
-# Logs
+# Logs and temporary files
 *.log
-
-# Database
-*.db
-
-# Coverage
-.coverage
-htmlcov/
-coverage/
-
-# IDE
-.vscode/
-.idea/
+*.tmp
 *.swp
 *.swo
-*.tmp
 
-# OS
+# Coverage reports
+.coverage
+coverage/
+htmlcov/
+
+# IDE files
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# OS files
 .DS_Store
 Thumbs.db
+
+# Build artifacts
+build/
+dist/
+*.egg-info/
+target/
+.gradle/
+.mypy_cache/
+.pytest_cache/
 ```
