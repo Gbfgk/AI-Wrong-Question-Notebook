@@ -1,44 +1,258 @@
 ```
-# Compiled and binary files
-*.pyc
+# Dependencies
 __pycache__/
+*.pyc
 *.pyo
 *.pyd
-
-# Dependencies
+.Python
+env/
 venv/
 .venv/
 .env
 .env.local
-*.env.*
-
-# Logs and temporary files
-*.log
-*.tmp
-*.swp
-*.swo
-
-# Coverage reports
+.env.*
+.env.local.*
+.env.vault
+venv.bak/
+pip-log.txt
+pip-delete-this-directory.txt
+.tox/
 .coverage
-coverage/
-htmlcov/
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.log
+.gitattributes
+.next
+.next/cache/
+node_modules/
+jspm_packages/
+web_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnp.*
+.pnp.js
+.styleci.yml
+.stylelintignore
+.eslintcache
+.eslintignore
+.jscpd.json
+.nyc_output
+.remarkrc
+.gitattributes
+.gitignore
+.svn/
+CVS/
 
-# IDE files
+# Testing
+.pytest_cache/
+.hypothesis/
+.coverage
+htmlcov/
+.coverage.*
+.tox/
+.nox/
+.cover/
+*.gcda
+*.gcno
+
+# Distribution / packaging
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# PyInstaller
+*.manifest
+*.spec
+
+# Installer logs
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+.pytest_cache/
+
+# Translations
+*.mo
+*.pot
+
+# Django stuff:
+*.log
+local_settings.py
+db.sqlite3
+db.sqlite3-journal
+
+# Flask stuff:
+instance/
+.webassets-cache
+
+# Scrapy stuff:
+.scrapy
+
+# Sphinx documentation
+docs/_build/
+
+# PyBuilder
+.pybuilder/
+target/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# IPython
+profile_default/
+ipython_config.py
+
+# pyenv
+.python-version
+
+# pipenv
+Pipfile.lock
+
+# PEP 582
+__pypackages__/
+
+# Celery stuff
+celerybeat-schedule
+celerybeat.pid
+
+# SageMath parsed files
+*.sage.py
+
+# Environments
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Spyder project settings
+.spyderproject
+.spyproject
+
+# Rope project settings
+.ropeproject
+
+# mkdocs documentation
+/site
+
+# mypy
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# Pyre type checker
+.pyre/
+
+# IDE
 .vscode/
 .idea/
-*.sublime-project
-*.sublime-workspace
+*.swp
+*.swo
+*~
 
-# OS files
+# OS generated files
 .DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
 Thumbs.db
+Icon?
+.apdisk
 
-# Build artifacts
+# Docker
+.dockerenv
+!Dockerfile
+!docker-compose.yml
+
+# Build files
 build/
 dist/
 *.egg-info/
-target/
-.gradle/
-.mypy_cache/
-.pytest_cache/
+*.so
+*.dylib
+*.dll
+*.exe
+*.out
+*.o
+*.obj
+*.a
+*.lib
+*.pdb
+*.ilk
+*.exp
+*.dSYM/
+*.map
+
+# Compressed files
+*.zip
+*.gz
+*.tar
+*.tgz
+*.bz2
+*.xz
+*.7z
+*.rar
+*.zst
+*.lz4
+*.lzh
+*.cab
+*.arj
+*.rpm
+*.deb
+*.Z
+*.lz
+*.lzo
+*.tar.gz
+*.tar.bz2
+*.tar.xz
+*.tar.zst
+
+# Logs
+*.log
+
+# Temp files
+*.tmp
+*~
 ```
+
+Wait, let me reconsider this. Looking at the actual changes, I see mostly source files and config files were modified. The only potentially ignorable items would be if there were build artifacts, but looking more carefully:
+
+Added: ['build.py', 'Dockerfile', 'docker-compose.yml', 'templates/setup.html']
+Modified: ['.gitignore', 'README.md', 'app.py', 'data/config.json', 'data/mistake_book.db', 'requirements.txt', 'setup_config.py']
+
+These are all source/config files. No build artifacts or temporary files detected in the changes that warrant adding to .gitignore.
+
+(empty — output nothing)

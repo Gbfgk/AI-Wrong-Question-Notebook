@@ -598,35 +598,12 @@ def settings():
     return render_template('settings.html', config=config)
 
 if __name__ == '__main__':
-    # 初始化数据库
     init_db()
     
-    # 检查配置文件
-    if not os.path.exists(CONFIG_FILE):
-        print("=" * 60)
-        print("首次启动：请先运行配置脚本")
-        print("执行：python setup_config.py")
-        print("=" * 60)
-        print("\n将使用默认配置启动...")
-        
-        # 创建默认配置
-        os.makedirs("data", exist_ok=True)
-        default_config = {
-            "database": {
-                "host": "localhost",
-                "port": "3306",
-                "name": "mistake_book",
-                "user": "root",
-                "password": ""
-            },
-            "api": {
-                "base_url": "https://dashscope.aliyuncs.com/compatible-mode/v1",
-                "key": "sk-00000000"
-            }
-        }
-        with open(CONFIG_FILE, 'w', encoding='utf-8') as f:
-            json.dump(default_config, f, indent=4, ensure_ascii=False)
-    
-    print("启动服务器...")
+    print("=" * 60)
+    print("AI 错题本启动中...")
     print("访问地址：http://localhost:5000")
+    print("如果是首次启动，系统将引导您进行配置")
+    print("=" * 60)
+    
     app.run(debug=True, host='0.0.0.0', port=5000)

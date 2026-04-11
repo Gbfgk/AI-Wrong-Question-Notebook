@@ -1,0 +1,122 @@
+{% extends "base.html" %}
+
+{% block title %}系统配置 - AI 错题本{% endblock %}
+
+{% block content %}
+<div class="container" style="margin-top: 60px;">
+    <div class="row">
+        <div class="col s12 m8 offset-m2 l6 offset-l3">
+            <div class="card">
+                <div class="card-content">
+                    <span class="card-title center-align">
+                        <i class="material-icons">settings</i>
+                        首次启动配置
+                    </span>
+                    
+                    <div class="progress" id="loadingProgress" style="display:none;">
+                        <div class="indeterminate"></div>
+                    </div>
+                    
+                    <form method="POST" action="{{ url_for('setup') }}" id="setupForm">
+                        <div class="section">
+                            <h5 class="center-align teal-text">API 配置</h5>
+                            
+                            <div class="input-field">
+                                <i class="material-icons prefix">link</i>
+                                <input type="url" id="base_url" name="base_url" 
+                                       value="https://dashscope.aliyuncs.com/compatible-mode/v1"
+                                       class="validate">
+                                <label for="base_url">API Base URL</label>
+                                <span class="helper-text">默认使用阿里云通义千问 API</span>
+                            </div>
+                            
+                            <div class="input-field">
+                                <i class="material-icons prefix">vpn_key</i>
+                                <input type="text" id="api_key" name="api_key" required class="validate">
+                                <label for="api_key">API Key</label>
+                                <span class="helper-text">请输入您的 API 密钥（如：sk-xxxxx）</span>
+                            </div>
+                        </div>
+                        
+                        <div class="section">
+                            <h5 class="center-align teal-text">管理员账户</h5>
+                            
+                            <div class="input-field">
+                                <i class="material-icons prefix">person</i>
+                                <input type="text" id="admin_username" name="admin_username" required class="validate">
+                                <label for="admin_username">管理员用户名</label>
+                            </div>
+                            
+                            <div class="input-field">
+                                <i class="material-icons prefix">lock</i>
+                                <input type="password" id="admin_password" name="admin_password" required class="validate">
+                                <label for="admin_password">管理员密码</label>
+                            </div>
+                            
+                            <div class="input-field">
+                                <i class="material-icons prefix">email</i>
+                                <input type="email" id="admin_email" name="admin_email" class="validate">
+                                <label for="admin_email">管理员邮箱（可选）</label>
+                            </div>
+                        </div>
+                        
+                        <div class="section center-align">
+                            <button type="submit" class="btn-large teal waves-effect waves-light">
+                                <i class="material-icons left">check</i>
+                                完成配置并继续
+                            </button>
+                        </div>
+                    </form>
+                </div>
+                
+                <div class="card-action teal lighten-5">
+                    <div class="row mb-0">
+                        <div class="col s12">
+                            <p class="center-align grey-text text-darken-2">
+                                <strong>说明：</strong><br>
+                                1. 本系统使用 SQLite 数据库，无需额外配置<br>
+                                2. API 用于 AI 解答和举一反三功能<br>
+                                3. 管理员账户拥有最高权限，可管理系统设置<br>
+                                4. 配置完成后将无法再次修改管理员密码
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('setupForm');
+    const loadingProgress = document.getElementById('loadingProgress');
+    
+    form.addEventListener('submit', function(e) {
+        const apiKey = document.getElementById('api_key').value.trim();
+        const adminUsername = document.getElementById('admin_username').value.trim();
+        const adminPassword = document.getElementById('admin_password').value;
+        
+        if (!apiKey) {
+            M.toast({html: 'API Key 不能为空', classes: 'red'});
+            e.preventDefault();
+            return false;
+        }
+        
+        if (!adminUsername || !adminPassword) {
+            M.toast({html: '管理员用户名和密码不能为空', classes: 'red'});
+            e.preventDefault();
+            return false;
+        }
+        
+        // 显示加载进度
+        loadingProgress.style.display = 'block';
+        
+        // 延迟提交以显示加载动画
+        setTimeout(() => {
+            form.submit();
+        }, 500);
+    });
+});
+</script>
+{% endblock %}
