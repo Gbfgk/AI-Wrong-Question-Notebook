@@ -1,0 +1,19 @@
+version: '3.8'
+
+services:
+  ai-wrong-question-notebook:
+    build: .
+    container_name: ai-wrong-question-book
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./data:/app/data
+    restart: unless-stopped
+    environment:
+      - FLASK_ENV=production
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5000"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
