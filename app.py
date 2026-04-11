@@ -28,6 +28,13 @@ app.secret_key = os.urandom(24).hex()
 CONFIG_FILE = "data/config.json"
 DB_FILE = "data/mistake_book.db"
 
+@app.context_processor
+def inject_globals():
+    """注入全局变量到所有模板"""
+    return {
+        'is_system_setup': is_system_setup
+    }
+
 def load_config():
     """加载配置文件"""
     if os.path.exists(CONFIG_FILE):

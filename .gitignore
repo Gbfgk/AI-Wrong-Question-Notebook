@@ -18,26 +18,9 @@ node_modules/
 # Environment
 .env
 .env.local
-.env.*
+*.env.*
 
 # Editors
 .vscode/
 .idea/
-
-# Coverage reports
-coverage/
-htmlcov/
-.coverage
-
-# Distribution artifacts
-dist/
-build/
-target/
-
-# Python specific
-*.pyc
-__pycache__/
-.Python
-*.so
-*.egg-info/
 ```
