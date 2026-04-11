@@ -101,6 +101,12 @@
         <a href="{{ url_for('login') }}" class="btn-large orange lighten-1 waves-effect waves-light" style="margin-left: 10px;">
             <i class="material-icons left">login</i>立即登录
         </a>
+        {% if not is_system_setup() %}
+        <br><br>
+        <a href="{{ url_for('setup') }}" class="btn teal lighten-1 waves-effect waves-light">
+            <i class="material-icons left">settings</i>首次启动配置
+        </a>
+        {% endif %}
     </div>
 </div>
 {% endblock %}

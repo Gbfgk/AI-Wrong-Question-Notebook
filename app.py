@@ -35,6 +35,19 @@ def load_config():
             return json.load(f)
     return None
 
+def save_config(config_data):
+    """保存配置文件"""
+    os.makedirs("data", exist_ok=True)
+    with open(CONFIG_FILE, 'w', encoding='utf-8') as f:
+        json.dump(config_data, f, indent=2, ensure_ascii=False)
+
+def is_system_setup():
+    """检查系统是否已配置"""
+    config = load_config()
+    if not config:
+        return False
+    return config.get('is_setup', False)
+
 def get_db():
     """获取数据库连接"""
     if 'db' not in g:
@@ -117,6 +130,27 @@ def init_db():
     conn.commit()
     conn.close()
 
+def init_admin_user(admin_username, admin_password, admin_email=None):
+    """初始化管理员账户"""
+    conn = sqlite3.connect(DB_FILE)
+    cursor = conn.cursor()
+    
+    # 检查是否已有管理员
+    cursor.execute("SELECT id FROM users WHERE username = ?", (admin_username,))
+    if cursor.fetchone():
+        conn.close()
+        return False
+    
+    # 创建管理员账户
+    password_hash = hash_password(admin_password)
+    cursor.execute(
+        "INSERT INTO users (username, password_hash, email, created_at) VALUES (?, ?, ?, ?)",
+        (admin_username, password_hash, admin_email, datetime.now())
+    )
+    conn.commit()
+    conn.close()
+    return True
+
 def hash_password(password):
     """密码哈希"""
     return hashlib.sha256(password.encode()).hexdigest()
@@ -180,9 +214,56 @@ def generate_ai_response(prompt, max_tokens=1000):
 @app.route('/')
 def index():
     """首页"""
+    # 如果系统未配置，重定向到设置页面
+    if not is_system_setup():
+        return redirect(url_for('setup'))
+    
     if 'user_id' in session:
         return redirect(url_for('dashboard'))
     return render_template('index.html')
+
+@app.route('/setup', methods=['GET', 'POST'])
+def setup():
+    """系统首次配置"""
+    # 如果已配置，重定向到首页
+    if is_system_setup():
+        return redirect(url_for('index'))
+    
+    if request.method == 'POST':
+        base_url = request.form.get('base_url', '').strip()
+        api_key = request.form.get('api_key', '').strip()
+        admin_username = request.form.get('admin_username', '').strip()
+        admin_password = request.form.get('admin_password', '')
+        admin_email = request.form.get('admin_email', '').strip()
+        
+        if not base_url or not api_key:
+            flash('API Base URL 和 API Key 不能为空', 'danger')
+            return render_template('setup.html')
+        
+        if not admin_username or not admin_password:
+            flash('管理员用户名和密码不能为空', 'danger')
+            return render_template('setup.html')
+        
+        # 保存配置
+        config = {
+            'is_setup': True,
+            'api': {
+                'base_url': base_url,
+                'key': api_key
+            },
+            'admin': {
+                'username': admin_username
+            }
+        }
+        save_config(config)
+        
+        # 初始化管理员账户
+        init_admin_user(admin_username, admin_password, admin_email)
+        
+        flash('系统配置成功！请使用管理员账户登录', 'success')
+        return redirect(url_for('login'))
+    
+    return render_template('setup.html')
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
