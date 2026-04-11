@@ -45,8 +45,11 @@ docker-compose down
 # 安装依赖
 pip install -r requirements.txt
 
-# 启动应用
+# 启动应用（默认自动打开浏览器）
 python app.py
+
+# 不自动打开浏览器
+python app.py --no-browser
 
 # 访问地址：http://localhost:5000
 ```
@@ -183,7 +186,12 @@ MIT License
 
 ## 更新日志
 
-### v2.0 (当前版本)
+### v2.1 (当前版本)
+- ✅ 启动时自动打开浏览器
+- ✅ 支持 `--no-browser` 参数禁用自动打开
+- ✅ 优化首次启动体验
+
+### v2.0 
 - ✅ 删除 setup_config.py，整合到 Web UI
 - ✅ 添加管理员账户系统
 - ✅ 首次启动通过 Web UI 配置
