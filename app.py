@@ -10,6 +10,9 @@ from datetime import datetime
 from functools import wraps
 from flask import Flask, render_template, request, redirect, url_for, session, flash, jsonify, g
 import hashlib
+import webbrowser
+import argparse
+from threading import Timer
 
 # 尝试导入OpenAI库
 try:
@@ -597,13 +600,25 @@ def settings():
     config = load_config()
     return render_template('settings.html', config=config)
 
+def open_browser():
+    """延迟打开浏览器"""
+    webbrowser.open('http://localhost:5000')
+
 if __name__ == '__main__':
+    # 解析命令行参数
+    parser = argparse.ArgumentParser(description='AI 错题本')
+    parser.add_argument('--no-browser', action='store_true', help='不自动打开浏览器')
+    args = parser.parse_args()
+    
     init_db()
     
     print("=" * 60)
     print("AI 错题本启动中...")
     print("访问地址：http://localhost:5000")
     print("如果是首次启动，系统将引导您进行配置")
+    if not args.no_browser:
+        print("正在自动打开浏览器...")
+        Timer(1.5, open_browser).start()  # 延迟1.5秒打开浏览器，等待服务启动
     print("=" * 60)
     
     app.run(debug=True, host='0.0.0.0', port=5000)
