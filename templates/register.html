@@ -35,6 +35,11 @@
                         <p class="grey-text">
                             已有账户？<a href="{{ url_for('login') }}" class="blue-text">立即登录</a>
                         </p>
+                        {% if not is_system_setup() %}
+                        <p class="grey-text" style="margin-top: 15px;">
+                            首次使用？<a href="{{ url_for('setup') }}" class="teal-text"><strong>点击这里进行系统配置</strong></a>
+                        </p>
+                        {% endif %}
                     </div>
                 </form>
             </div>
